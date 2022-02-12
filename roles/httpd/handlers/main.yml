@@ -1,7 +1,7 @@
 ---
 # handlers file for roles/httpd
 
-- name: restart "{{ package_svc }}"
+- name: restart {{ package_svc }}
   service:
     name: "{{ package_svc }}"
     state: restarted

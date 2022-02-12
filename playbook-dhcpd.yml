@@ -1,5 +1,5 @@
 ---
-- name: Instalacao do DHCP SERVER
+- name: Instalação do DHCP Server
   hosts: dhcp_server
   become: true
 

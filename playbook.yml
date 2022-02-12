@@ -1,7 +1,8 @@
 ---
-- name: Instalacao do DHCP SERVER
-  hosts: server
+- name: Instalação do DHCP Server e Apache
+  hosts: web_server,dhcp_server
   become: true
 
   roles:
     - dhcpd
+    - httpd

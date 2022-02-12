@@ -1,2 +1,28 @@
 ---
-# tasks file for roles/httpd
+# tasks file for roles/httpdd
+
+- name: Instala o {{ package_svc }}
+  yum:
+    name: "{{ package_name }}"
+    state: present
+
+- name: Cria o index.html
+  copy:
+    content: "{{ index_content }}"
+    dest: "{{ index_file }}"
+  notify:
+    - restart {{ package_svc }}
+
+- name: Inicia o serviço {{ package_svc }} e habilita para iniciar na junto com o sistema operacional.
+  service:
+    name: "{{ package_svc }}"
+    state: started
+    enabled: yes
+
+- name: Configura o firewall para aceitar as requisições na porta do {{ firewall_svc }}.
+  firewalld:
+    service: "{{ item }}"
+    permanent: yes
+    state: enabled
+    immediate: yes
+  loop: "{{ firewall_svc }}"
