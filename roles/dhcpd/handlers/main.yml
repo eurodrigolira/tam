@@ -1,0 +1,7 @@
+---
+# handlers file for roles/dhcpd
+
+- name: restart {{ package_svc }}
+  service:
+    name: "{{ package_svc }}"
+    state: restarted

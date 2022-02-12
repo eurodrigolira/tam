@@ -1,0 +1,40 @@
+---
+- name: Instalacao do DHCP
+  hosts: server
+  become: true
+  vars_files:
+    - vars.yml
+
+  tasks:
+     
+    - name: Install HTTPD
+      yum:
+        name: httpd
+        state: present
+    
+    - name: Criar o index.html
+      copy:
+        path: /etc/dhcp/hosts
+        state: touch
+      notify:
+        - restart dhcpd  
+
+    - name: Habilita e Inicia o Serviço
+      service:
+        name: dhcpd
+        state: started
+        enabled: yes
+
+    - name: Libera no firewall
+      firewalld:
+        service: dhcp
+        permanent: yes
+        state: enabled
+        immediate: yes
+ 
+  handlers:
+    
+    - name: restart dhcpd
+      service:
+        name: dhcpd
+        state: restarted

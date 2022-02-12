@@ -1,0 +1,4 @@
+package_http: httpd
+package_svc: httpd
+firewall_svc: http
+mensagem_index: "Bem vindo ao teste Ansible"

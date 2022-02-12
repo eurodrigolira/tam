@@ -1,0 +1,7 @@
+---
+- name: Instalacao do DHCP SERVER
+  hosts: dhcp_server
+  become: true
+
+  roles:
+    - dhcpd

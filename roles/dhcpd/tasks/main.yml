@@ -1,0 +1,53 @@
+---
+# tasks file for roles/dhcpd
+
+- name: Instala o {{ package_svc }}
+  yum:
+    name: "{{ package_name }}"
+    state: present
+
+- name: Template
+  template:
+    src: dhcpd.conf.j2
+    dest: "{{ template_dest }}"
+  notify:
+    - restart {{ package_svc }}
+    
+- name: Criar o arquivo {{ hosts_file }} para os hosts com endereço IP estático.
+  file:
+    path: "{{ hosts_file }}"
+    state: touch
+
+- name: Lê o arquivo CSV e retorna uma lista.
+  read_csv:
+    path: "{{ csv_file }}"
+  register: hosts
+  delegate_to: localhost
+  become: false
+  # REF https://www.redhat.com/sysadmin/ansible-create-users-csv
+
+- name: Configura o arquivo {{ hosts_file }} com os dados do arquivo CSV.
+  blockinfile:
+    path: "{{ hosts_file }}"
+    block: |
+      host {{ item.HOSTNAME }}  {
+        hardware ethernet {{ item.MAC }};
+        fixed-address {{ item.IP }};
+      }
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{item.HOSTNAME}}"
+  loop: "{{ hosts.list }}"
+  notify:
+    - restart {{ package_svc }}
+
+- name: Inicia o serviço {{ package_svc }} e habilita para iniciar na junto com o sistema operacional.
+  service:
+    name: "{{ package_svc }}"
+    state: started
+    enabled: yes
+
+- name: Configura o firewall para aceitar as requisições na porta do {{ firewall_svc }}.
+  firewalld:
+    service: "{{ firewall_svc }}"
+    permanent: yes
+    state: enabled
+    immediate: yes

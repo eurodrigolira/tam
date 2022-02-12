@@ -1,0 +1,13 @@
+log-facility {{ log_facility }};
+
+subnet {{ subnet }} netmask {{ netmask }} {
+  range {{ range_start }} {{ range_end }};
+  option domain-name-servers {{ domain_name_servers }};
+  option domain-name "{{ domain_name }}";
+  option routers {{ routers }};
+  option broadcast-address {{ broadcast_address }};
+  default-lease-time {{ default_lease_time }};
+  max-lease-time {{ max_lease_time }};
+}
+
+include "/etc/dhcp/hosts";

@@ -1,0 +1,9 @@
+[servers:children]
+web_server
+dhcp_server
+
+[dhcp_server]
+dhcp
+
+[web_server]
+apache
