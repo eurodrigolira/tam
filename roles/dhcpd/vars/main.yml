@@ -8,7 +8,7 @@ netmask: 255.255.255.0
 range_start: 10.0.0.100
 range_end: 10.0.0.200
 domain_name: example.com
-domain_name_servers: ns1.example.com
+domain_name_servers: 10.0.0.254
 routers: 10.0.0.254
 broadcast_address: 10.0.0.255
 default_lease_time: 600
@@ -17,8 +17,8 @@ max_lease_time: 7200
 # vars for playbook
 template_dest: /etc/dhcp/dhcpd.conf
 hosts_file: /etc/dhcp/hosts
-csv_file: /home/administrador/tam/roles/dhcpd/files/hosts_dhcp.csv
+dest_csv_file: /tmp
+csv_file: hosts_dhcp.csv
 package_name: dhcp-server
 package_svc: dhcpd
 firewall_svc: dhcp
-

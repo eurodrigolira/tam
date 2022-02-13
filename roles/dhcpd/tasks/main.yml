@@ -12,18 +12,29 @@
     dest: "{{ template_dest }}"
   notify:
     - restart {{ package_svc }}
-    
+
+- name: Verifica se o arquivo {{ hosts_file }} existe.       
+  stat:
+    path: "{{ hosts_file }}"
+  register: hosts
+
 - name: Criar o arquivo {{ hosts_file }} para os hosts com endereço IP estático.
   file:
     path: "{{ hosts_file }}"
     state: touch
+  when: hosts.stat.islnk is not defined
+
+- name: Copia o arquivo CVS para o host remoto.
+  copy:
+    src: "{{ csv_file }}"
+    dest: "{{ dest_csv_file }}"
 
 - name: Lê o arquivo CSV e retorna uma lista.
   read_csv:
-    path: "{{ csv_file }}"
+    path: "{{ dest_csv_file }}/{{ csv_file }}"
   register: hosts
-  delegate_to: localhost
-  become: false
+  #  delegate_to: localhost
+  #become: false
   # REF https://www.redhat.com/sysadmin/ansible-create-users-csv
 
 - name: Configura o arquivo {{ hosts_file }} com os dados do arquivo CSV.
