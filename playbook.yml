@@ -1,8 +1,10 @@
 ---
 - name: Instalação do DHCP Server e Apache
-  hosts: web_server,dhcp_server
+  hosts: all
   become: true
 
   roles:
-    - dhcpd
-    - httpd
+    - role: dhcpd
+      when: inventory_hostname == 'dhcp'
+    - role: httpd
+      when: inventory_hostname == 'apache' 
