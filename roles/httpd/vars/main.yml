@@ -2,7 +2,7 @@
 # vars file for roles/httpd
 
 # vars for playbook
-index_content: "Bem vindo ao teste Ansible 10 :D\n"
+index_content: "Bem vindo ao teste Ansible\n"
 index_file: /var/www/html/index.html
 package_name: httpd
 package_svc: httpd
