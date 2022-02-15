@@ -33,9 +33,6 @@
   read_csv:
     path: "{{ dest_csv_file }}/{{ csv_file }}"
   register: hosts
-  #  delegate_to: localhost
-  #become: false
-  # REF https://www.redhat.com/sysadmin/ansible-create-users-csv
 
 - name: Configura o arquivo {{ hosts_file }} com os dados do arquivo CSV.
   blockinfile:
